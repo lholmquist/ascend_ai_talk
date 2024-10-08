@@ -13,7 +13,7 @@ const chain = prompt.pipe(model).pipe(parser);
 
 const response = await chain.invoke({
   language: 'French',
-  word: 'What is your name?'
+  word: 'hi'
 });
 
 console.log(response);
