@@ -19,6 +19,7 @@ const calculatorSchema = z.object({
 const calculatorTool = tool(
   async ({ operation, number1, number2 }) => {
     // Functions must return strings
+    console.log(operation, number1, number2);
     if (operation === "add") {
       return `${number1 + number2}`;
     } else if (operation === "subtract") {
@@ -38,19 +39,22 @@ const calculatorTool = tool(
   }
 );
 
+console.log(model);
 const llmWithTools = model.bindTools([calculatorTool]);
 
 const messages = [new HumanMessage("What is 3 * 12? Also, what is 11 + 49?")];
 const aiMessage = await llmWithTools.invoke(messages);
+console.log('First AIMessage', aiMessage);
 
 messages.push(aiMessage);
 
 for (const toolCall of aiMessage.tool_calls) {
+  console.log('Invoking the tool call', toolCall);
   const toolMessage = await calculatorTool.invoke(toolCall);
   messages.push(toolMessage);
 }
 
-console.log(messages);
+console.log('Outputing the Messages Array', messages);
 
 const result = await llmWithTools.invoke(messages);
-console.log(result);
+console.log('end result', result);

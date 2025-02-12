@@ -1,11 +1,12 @@
 import { ChatOpenAI } from '@langchain/openai';
 
 const model = new ChatOpenAI({
-  temperature: 0.9,
+  temperature: 0.3,
   openAIApiKey: 'EMPTY',
-  modelName: 'mistral'
-}, {
-  baseURL: 'http://localhost:8000/v1'
+  model: 'llama3.1',
+  configuration: {
+    baseURL: 'http://localhost:11434/v1'
+  }
 });
 
 export default model;
