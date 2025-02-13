@@ -33,7 +33,6 @@ const memory = new MemorySaver();
 const app = workflow.compile({checkpointer: memory});
 
 const config = {
-  streamMode: 'messages',
   configurable: {
     thread_id: 'funtimes'
   }
@@ -44,14 +43,12 @@ const input = {
 }
 
 console.log('calling response1');
-const response1 = await app.stream(input, config);
+const response1 = await app.invoke(input, config);
 
-for await(const [chunk, metadata] of await response1) {
-  console.log(`Message Content: ${chunk.content}`);
-}
+console.log('Response 1: ', response1.messages[response1.messages.length - 1]);
 
 console.log('calling response2');
-const response2 = await app.stream({
+const response2 = await app.invoke({
   messages: [
     {
       role: 'user',
@@ -60,9 +57,7 @@ const response2 = await app.stream({
   ]
 }, config);
 
-for await(const [chunk, metadata] of await response2) {
-  console.log(`Message Content: ${chunk.content}`);
-}
+console.log('Response 2: ', response2.messages[response2.messages.length - 1]);
 
 console.log('All Sessions:');
 const currentState = await app.getState(config);
